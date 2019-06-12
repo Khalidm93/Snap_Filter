@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="img/icon.png" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.0.0/cropper.min.css">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <style type="text/css">
+      .bg-header{background-color: #571845;}
+      .logo { font-size: 20px;color: #FFF ;padding-top: 10px;}
+      .bg-nav{background-color: rgb(255, 255, 255);box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.173);padding-top: 15px}
+      .icn {font-size: 30px;color: #FFF;}
+      canvas { background: rgba(255, 195, 0,0.5); width: 100%;height: auto;}
+      .content-1 {padding-left: 0;padding-right: 0;margin: 0 auto;display: block;float: none;width: 100%;height: 100%;padding-top: 10px;}
+    </style>
+    <title>Photo Editor</title>
+  </head>
+  <body>
+  <header>
+    <div class="container-fluid bg-header">
+      <div class="row">
+        <div class="col-md-2 col-4 text-center">
+          <button type="button" id="camera" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="material-icons icn">add_a_photo</i>
+          </button>
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Prendre une photo</h5>
+                  <button type="button" class="close" id="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <video id="video" autoplay class="content-1"></video>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" id="close1" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" id="copie" class="btn btn-primary" data-dismiss="modal">Copier image courante</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1 col-4 text-center brd">
+          <label for="imageUpload" class="btn btn-link" style="cursor: pointer;">
+            <i class="material-icons icn">add_photo_alternate</i>
+          </label>
+          <input type="file" id="imageUpload" class="form-control" accept="image/*" name="photo" style="display: none">
+        </div>
+        <div class="col-md-8 text-center">
+          <p class="logo">snap filter</p>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3 bg-nav">
+          <form id="imageEditor">
+            <div class="row">
+              <div class="container">
+                <div class="form-group row">
+                  <label for="gs" class="col-sm-4 col-form-label">Grayscale</label>
+                  <div class="col-sm-8">
+                    <input id="gs" class="form-control"  type="range" min=0 max=100 value=0>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="blur" class="col-sm-4 col-form-label">Blur</label>
+                  <div class="col-sm-8">
+                    <input id="blur"  name="blur" class="form-control" type="range" min=0 max=10 value=0>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="br" class="col-sm-4 col-form-label">Brightness</label>
+                  <div class="col-sm-8">
+                    <input id="br" name="br" class="form-control" type="range" min=0 max=200 value=100>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="ct" class="col-sm-4 col-form-label">Contrast</label>
+                  <div class="col-sm-8">
+                    <input id="ct" name="ct" class="form-control"  type="range" min=0 max=200 value=100>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="huer" class="col-sm-4 col-form-label">Hue Rotate</label>
+                  <div class="col-sm-8">
+                    <input id="huer" name="huer" class="form-control"  type="range" min=0 max=360 value=0>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="opacity" class="col-sm-4 col-form-label">Opacity</label>
+                  <div class="col-sm-8">
+                    <input id="opacity" name="opacity" class="form-control"  type="range" min=0 max=100 value=100>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="invert" class="col-sm-4 col-form-label">Invert</label>
+                  <div class="col-sm-8">
+                    <input id="invert" name="invert" class="form-control" type="range" min=0 max=100 value=0>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="saturate" class="col-sm-4 col-form-label">Saturate</label>
+                  <div class="col-sm-8">
+                    <input id="saturate" name="saturate" class="form-control" type="range" min=0 max=500 value=100>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="sepia" class="col-sm-4 col-form-label">Sepia</label>
+                  <div class="col-sm-8">
+                    <input id="sepia" name="sepia" class="form-control" type="range" min=0 max=100 value=0>
+                  </div>
+                </div>
+              </div>    
+            </div>
+          </form>
+        </div>
+        <div class="col-md-9" style="padding-top: 10px;">
+          <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-12 text-center">
+              <a id="download" download="image.png">
+                <button type="button" class="btn btn-warning btn-sx" > Save </button>
+              </a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <canvas id="origine">
+                Désolé, votre navigateur ne supporte pas les &lt;canvas&gt; élément.
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
+    <script type="text/javascript">
+      $(function(){
+        const canvas = document.querySelector('#origine')
+        const ctx = canvas.getContext('2d')
+
+        function activeCamera() {
+          navigator.mediaDevices.getUserMedia({video: true}).then(function(stream){
+            video.srcObject = stream
+          })
+        }
+        $( "#camera" ).on( "click", activeCamera );  
+
+        function desactiveCamera() {
+          let stream = video.srcObject;
+          let tracks = stream.getTracks();
+
+          tracks.forEach(function(track) {
+            track.stop();
+          });
+
+          video.srcObject = null;
+        }
+        $( "#close,#close1" ).on( "click", desactiveCamera );
+        function prendPhoto(e) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          
+          ctx.drawImage(video,0,0,canvas.width ,canvas.height);
+
+          desactiveCamera()
+        }
+        $( "#copie" ).on( "click", prendPhoto );
+        function uploadImage(e){
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          const reader = new FileReader();
+          reader.onload = function(event){
+              const imgNew = new Image();
+              imgNew.onload = function(){
+                ctx.drawImage(imgNew,0,0,canvas.width,canvas.height )
+              }
+              imgNew.src = event.target.result;
+          }
+          reader.readAsDataURL(e.target.files[0]);  
+        }
+        $( "#imageUpload" ).on('change', uploadImage);
+
+        function filterValue() {
+          var gs     = $("#gs").val();       
+          var blur   = $("#blur").val();    
+          var br     = $("#br").val();      
+          var ct     = $("#ct").val();      
+          var huer   = $("#huer").val();    
+          var opacity      = $("#opacity").val();
+          var invert   = $("#invert").val(); 
+          var saturate     = $("#saturate").val();
+          var sepia    = $("#sepia").val();
+
+          return'grayscale(' + gs+'%) blur(' + blur +'px) brightness(' + br +'%) contrast(' + ct +'%) hue-rotate(' + huer +
+              'deg) opacity(' + opacity +'%) invert(' + invert +'%) saturate(' + saturate +'%) sepia(' + sepia + '%)';
+        }
+        function appFilter(){
+          const dataUrl = canvas.toDataURL("image/jpeg")
+          const img = new Image()
+          img.src = dataUrl
+          img.onload = function() {
+            ctx.save()
+            ctx.filter =  filterValue()
+            ctx.drawImage(img,0,0,canvas.width,canvas.height )
+            ctx.restore()
+          }
+        }
+        $( "input[type=range]" ).on('change', appFilter);
+        function reset() {
+          appFilter();
+        }
+        $( "#reset" ).on('click', reset);
+        function save() {
+          var download = document.getElementById("download");
+          var image = canvas.toDataURL("image/png")
+          .replace("image/png", "image/octet-stream");
+          download.setAttribute("href", image);
+        }
+        $( "#download" ).on('click', save);
+
+      })
+    </script>
+  </body>
+</html>
